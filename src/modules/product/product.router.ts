@@ -10,4 +10,10 @@ router.post('/', ProductControlers.createProductToDB);
 //get all products
 router.get('/', ProductControlers.getAllProductsFromDB);
 
+// get product by specific id
+router.get('/:productId', ProductControlers.getProductByIdFromDB);
+
+//update product
+router.put('/:productId', ProductControlers.updateProductByIdFromDB);
+
 export const ProductRoutes = router;
