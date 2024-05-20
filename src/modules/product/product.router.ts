@@ -1,15 +1,13 @@
 import express, { Request, Response } from 'express';
 import { Product } from './product.model';
+import { ProductControlers } from './product.controller';
 
 const router = express.Router();
 
-router.post('/', async (req: Request, res: Response) => {
-  const result = await Product.create(req.body);
-  res.json({
-    success: true,
-    message: 'Product created successfully!',
-    data: result,
-  });
-});
+//product post method
+router.post('/', ProductControlers.createProductToDB);
+
+//get all products
+router.get('/', ProductControlers.getAllProductsFromDB);
 
 export const ProductRoutes = router;
