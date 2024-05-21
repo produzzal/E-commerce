@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
 import { productValidationSchema } from './product.zod.validation';
-import { Product } from './product.model';
 
 //product post
 const createProductToDB = async (req: Request, res: Response) => {
@@ -52,7 +51,7 @@ const getAllProductsFromDB = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'Something went wrong!',
+      message: error.message || 'Something went wrong!',
       data: error,
     });
   }
@@ -72,7 +71,7 @@ const getProductByIdFromDB = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'Something went wrong!',
+      message: error.message || 'Something went wrong!',
       data: error,
     });
   }
@@ -84,6 +83,7 @@ const updateProductByIdFromDB = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
     const updateData = req.body;
+
     const result = await ProductServices.updateProductByIdFromDB(
       productId,
       updateData,
@@ -97,7 +97,7 @@ const updateProductByIdFromDB = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'Something went wrong!',
+      message: error.message || 'Something went wrong!',
       data: error,
     });
   }
@@ -121,26 +121,6 @@ const DeleteProduct = async (req: Request, res: Response) => {
     });
   }
 };
-
-//search product
-
-// const SearchProduct = async (req: Request, res: Response) => {
-//   try {
-//     const searchTerm = req.params.searchTerm;
-//     const result = await ProductServices.searchProduct(searchTerm);
-//     res.status(200).json({
-//       success: true,
-//       message: `Products matching search term ${searchTerm} fetched successfully!`,
-//       data: result,
-//     });
-//   } catch (error: any) {
-//     res.status(500).json({
-//       success: false,
-//       message: error.message || 'Something went wrong!',
-//       data: error,
-//     });
-//   }
-// };
 
 export const ProductControlers = {
   createProductToDB,

@@ -27,8 +27,17 @@ const getProductByIdFromDB = async (id: string) => {
 };
 
 //update product
-const updateProductByIdFromDB = async (id: string, updateData: TProduct) => {
-  const result = await Product.findByIdAndUpdate({ _id: id }, updateData);
+const updateProductByIdFromDB = async (
+  productId: string,
+  updateData: TProduct,
+) => {
+  const options = { new: true };
+
+  const result = await Product.findByIdAndUpdate(
+    productId,
+    updateData,
+    options,
+  );
   return result;
 };
 
@@ -39,15 +48,6 @@ const deleteProductFromDB = async (id: string) => {
   console.log(result);
   return result;
 };
-
-//search product
-
-// const searchProduct = async (searchTerm: string) => {
-//   const result = await Product.find({
-//     name: { $regex: new RegExp(searchTerm, 'i') },
-//   });
-//   return result;
-// };
 
 export const ProductServices = {
   createProduct,
