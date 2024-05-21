@@ -16,5 +16,5 @@ type TProduct = {
   tags: string[];
   variants: TVariant[];
   inventory: TInventory;
-  isDeleted: boolean;
+  isDeleted?: boolean;
 };

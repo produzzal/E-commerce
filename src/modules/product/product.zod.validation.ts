@@ -25,5 +25,4 @@ export const productValidationSchema = z.object({
     .array(productVariantValidationSchema)
     .nonempty({ message: 'At least one variant is required' }),
   inventory: inventoryValidationSchema,
-  isDelete: z.boolean().optional(),
 });

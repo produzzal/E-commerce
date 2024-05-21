@@ -12,7 +12,7 @@ const createProductToDB = async (req: Request, res: Response) => {
 
     const zodParseData = productValidationSchema.parse(productData);
 
-    const result = await Product.create(zodParseData);
+    const result = await ProductServices.createProduct(zodParseData);
     res.status(200).json({
       success: true,
       message: 'Product created successfully!',
@@ -32,12 +32,23 @@ const createProductToDB = async (req: Request, res: Response) => {
 
 const getAllProductsFromDB = async (req: Request, res: Response) => {
   try {
-    const result = await ProductServices.getAllProductsFromDB();
-    res.status(200).json({
-      success: true,
-      message: 'Products fetched successfully!',
-      data: result,
-    });
+    const { searchTerm } = req.query;
+    const result = await ProductServices.getAllProductsFromDB(
+      searchTerm as string,
+    );
+    if (searchTerm) {
+      res.status(200).json({
+        success: true,
+        message: `Products matching search term ${result[0].name} fetched successfully!`,
+        data: result,
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: 'products fetched successfully!',
+        data: result,
+      });
+    }
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -97,7 +108,6 @@ const DeleteProduct = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
     const result = await ProductServices.deleteProductFromDB(productId);
-    console.log(result);
     res.status(200).json({
       success: true,
       message: 'Product deleted successfully!',
@@ -111,6 +121,26 @@ const DeleteProduct = async (req: Request, res: Response) => {
     });
   }
 };
+
+//search product
+
+// const SearchProduct = async (req: Request, res: Response) => {
+//   try {
+//     const searchTerm = req.params.searchTerm;
+//     const result = await ProductServices.searchProduct(searchTerm);
+//     res.status(200).json({
+//       success: true,
+//       message: `Products matching search term ${searchTerm} fetched successfully!`,
+//       data: result,
+//     });
+//   } catch (error: any) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message || 'Something went wrong!',
+//       data: error,
+//     });
+//   }
+// };
 
 export const ProductControlers = {
   createProductToDB,

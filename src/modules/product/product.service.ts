@@ -7,9 +7,17 @@ const createProduct = async (productData: TProduct) => {
 };
 
 //get all product
-const getAllProductsFromDB = async () => {
-  const result = await Product.find();
-  return result;
+const getAllProductsFromDB = async (searchTerm: string) => {
+  let products;
+  if (searchTerm) {
+    products = await Product.find({
+      name: { $regex: searchTerm as string, $options: 'i' },
+    });
+    return products;
+  } else {
+    products = await Product.find();
+    return products;
+  }
 };
 
 // get single product
@@ -31,6 +39,15 @@ const deleteProductFromDB = async (id: string) => {
   console.log(result);
   return result;
 };
+
+//search product
+
+// const searchProduct = async (searchTerm: string) => {
+//   const result = await Product.find({
+//     name: { $regex: new RegExp(searchTerm, 'i') },
+//   });
+//   return result;
+// };
 
 export const ProductServices = {
   createProduct,
