@@ -1,5 +1,4 @@
-import express, { Request, Response } from 'express';
-import { Product } from './product.model';
+import express from 'express';
 import { ProductControlers } from './product.controller';
 
 const router = express.Router();
@@ -15,5 +14,8 @@ router.get('/:productId', ProductControlers.getProductByIdFromDB);
 
 //update product
 router.put('/:productId', ProductControlers.updateProductByIdFromDB);
+
+//delete product
+router.delete('/:productId', ProductControlers.DeleteProduct);
 
 export const ProductRoutes = router;

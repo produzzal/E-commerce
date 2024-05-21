@@ -1,15 +1,31 @@
 import { Request, Response } from 'express';
 import { ProductServices } from './product.service';
+import { productValidationSchema } from './product.zod.validation';
+import { Product } from './product.model';
 
 //product post
 const createProductToDB = async (req: Request, res: Response) => {
-  const movieData = req.body;
-  const result = await ProductServices.createProduct(movieData);
-  res.json({
-    success: true,
-    message: 'Product created successfully!',
-    data: result,
-  });
+  try {
+    const productData = req.body;
+
+    // zod validation
+
+    const zodParseData = productValidationSchema.parse(productData);
+
+    const result = await Product.create(zodParseData);
+    res.status(200).json({
+      success: true,
+      message: 'Product created successfully!',
+      data: result,
+    });
+    return result;
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong!',
+      error: error,
+    });
+  }
 };
 
 //all products get
@@ -61,6 +77,7 @@ const updateProductByIdFromDB = async (req: Request, res: Response) => {
       productId,
       updateData,
     );
+
     res.status(200).json({
       success: true,
       message: 'Product updated successfully!',
@@ -75,9 +92,30 @@ const updateProductByIdFromDB = async (req: Request, res: Response) => {
   }
 };
 
+//Delete product
+const DeleteProduct = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+    const result = await ProductServices.deleteProductFromDB(productId);
+    console.log(result);
+    res.status(200).json({
+      success: true,
+      message: 'Product deleted successfully!',
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong!',
+      data: error,
+    });
+  }
+};
+
 export const ProductControlers = {
   createProductToDB,
   getAllProductsFromDB,
   getProductByIdFromDB,
   updateProductByIdFromDB,
+  DeleteProduct,
 };
