@@ -1,21 +1,21 @@
 import express from 'express';
-import { ProductControlers } from './product.controller';
+import { ProductControllers } from './product.controller';
 
 const router = express.Router();
 
 //product post method
-router.post('/', ProductControlers.createProductToDB);
+router.post('/', ProductControllers.createProductToDB);
 
 //get all products
-router.get('/', ProductControlers.getAllProductsFromDB);
+router.get('/', ProductControllers.getAllProductsFromDB);
 
 // get product by specific id
-router.get('/:productId', ProductControlers.getProductByIdFromDB);
+router.get('/:productId', ProductControllers.getProductByIdFromDB);
 
 //update product
-router.put('/:productId', ProductControlers.updateProductByIdFromDB);
+router.put('/:productId', ProductControllers.updateProductByIdFromDB);
 
 //delete product
-router.delete('/:productId', ProductControlers.DeleteProduct);
+router.delete('/:productId', ProductControllers.DeleteProduct);
 
 export const ProductRoutes = router;

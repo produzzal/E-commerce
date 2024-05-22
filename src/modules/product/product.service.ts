@@ -10,22 +10,19 @@ const createProduct = async (productData: TProduct) => {
 const getAllProductsFromDB = async (searchTerm: string) => {
   let products;
   if (searchTerm) {
-    products = await Product.find(
-      {
-        name: { $regex: searchTerm as string, $options: 'i' },
-      },
-      '-isDeleted',
-    );
+    products = await Product.find({
+      name: { $regex: searchTerm as string, $options: 'i' },
+    });
     return products;
   } else {
-    products = await Product.find({}, '-isDeleted');
+    products = await Product.find();
     return products;
   }
 };
 
 // get single product
 const getProductByIdFromDB = async (id: string) => {
-  const result = await Product.findById(id, '-isDeleted');
+  const result = await Product.findById(id);
   return result;
 };
 
@@ -46,9 +43,7 @@ const updateProductByIdFromDB = async (
 
 // delete product
 const deleteProductFromDB = async (id: string) => {
-  console.log(id);
-  const result = await Product.updateOne({ _id: id }, { isDeleted: true });
-  console.log(result);
+  const result = await Product.findByIdAndDelete(id);
   return result;
 };
 
