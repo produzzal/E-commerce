@@ -1,11 +1,20 @@
+import { Product } from '../product/product.model';
 import { Order } from './order.model';
 
-//create order
-const createOrder = async (orderData: TOrder) => {
-  const result = await Order.create(orderData);
-  return result;
+//get all orders
+const getAllOrders = async (email: string) => {
+  let orders;
+  if (email) {
+    orders = await Order.find({
+      email: { $regex: email as string, $options: 'i' },
+    });
+    return orders;
+  } else {
+    orders = await Order.find();
+    return orders;
+  }
 };
 
 export const OrderServices = {
-  createOrder,
+  getAllOrders,
 };
