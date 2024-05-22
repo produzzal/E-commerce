@@ -3,6 +3,34 @@ import { OrderValidationSchema } from './order.zod.validation';
 import { Product } from '../product/product.model';
 import { OrderServices } from './order.service';
 
+const orderCreate = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.body;
+    const orderData = req.body;
+    const zodParseData = OrderValidationSchema.parse(orderData);
+
+    //find Product data
+
+    // Check if the product exists
+    const productExists = await Product.exists({ _id: productId });
+
+    const result = await OrderServices.createOrder(zodParseData);
+    res.status(200).json({
+      success: true,
+      message: 'Order created successfully!',
+      data: result,
+    });
+
+    // Create the order
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong!',
+      error: error,
+    });
+  }
+};
+
 const getAllOrdersFromDB = async (req: Request, res: Response) => {
   try {
     const { email } = req.query;
@@ -33,5 +61,6 @@ const getAllOrdersFromDB = async (req: Request, res: Response) => {
 };
 
 export const OrderControllers = {
+  orderCreate,
   getAllOrdersFromDB,
 };
