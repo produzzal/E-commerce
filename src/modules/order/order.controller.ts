@@ -9,8 +9,6 @@ const orderCreate = async (req: Request, res: Response) => {
     const orderData = req.body;
     const zodParseData = OrderValidationSchema.parse(orderData);
 
-    //find Product data
-
     // Check if the product exists
     const productExists = await Product.exists({ _id: productId });
 
@@ -31,6 +29,7 @@ const orderCreate = async (req: Request, res: Response) => {
   }
 };
 
+//get all orders
 const getAllOrdersFromDB = async (req: Request, res: Response) => {
   try {
     const { email } = req.query;

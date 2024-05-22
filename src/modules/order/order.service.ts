@@ -5,7 +5,7 @@ const createOrder = async (orderData: TOrder) => {
   try {
     const { productId, quantity } = orderData;
 
-    // Fetch the product details
+    // find the product details
     const product = await Product.findById(productId);
     if (!product || !product.inventory) {
       throw new Error('Product not found');
@@ -15,19 +15,18 @@ const createOrder = async (orderData: TOrder) => {
       throw new Error('Insufficient quantity available in inventory');
     }
 
-    // Determine the new value for inStock
-    const newInStockValue = product.inventory.quantity - quantity > 0;
+    // new value
+    const Value = product.inventory.quantity - quantity > 0;
 
-    // Update the product inventory using atomic operators
+    // Update the product
     await Product.updateOne(
       { _id: productId },
       {
         $inc: { 'inventory.quantity': -quantity },
-        $set: { 'inventory.inStock': newInStockValue },
+        $set: { 'inventory.inStock': Value },
       },
     );
 
-    // Embed the product details in the order
     const orderWithProductDetails = {
       ...orderData,
       productDetails: {

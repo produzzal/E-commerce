@@ -10,19 +10,22 @@ const createProduct = async (productData: TProduct) => {
 const getAllProductsFromDB = async (searchTerm: string) => {
   let products;
   if (searchTerm) {
-    products = await Product.find({
-      name: { $regex: searchTerm as string, $options: 'i' },
-    });
+    products = await Product.find(
+      {
+        name: { $regex: searchTerm as string, $options: 'i' },
+      },
+      '-isDeleted',
+    );
     return products;
   } else {
-    products = await Product.find();
+    products = await Product.find({}, '-isDeleted');
     return products;
   }
 };
 
 // get single product
 const getProductByIdFromDB = async (id: string) => {
-  const result = await Product.findById(id);
+  const result = await Product.findById(id, '-isDeleted');
   return result;
 };
 
